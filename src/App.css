@@ -483,75 +483,275 @@ body {
   transform: translateY(-2px);
 }
 
-/* Markdown Content 样式 */
+/* Word Footer */
+.word-footer {
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.timestamp {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.word-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  font-size: 0.85rem;
+  color: #666;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+}
+
+/* 增强的 Markdown 内容样式 */
 .word-content {
   padding: 2rem;
   max-height: 600px;
   overflow-y: auto;
 }
 
-.markdown-content {
-  line-height: 1.6;
+.enhanced-markdown {
+  line-height: 1.7;
   color: #333;
+  word-wrap: break-word;
 }
 
-.markdown-h1 {
-  color: #333;
+/* 增强的标题样式 */
+.markdown-h1-enhanced {
+  color: #2c3e50;
   font-size: 2rem;
   font-weight: 700;
   margin: 1.5rem 0 1rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 3px solid #667eea;
-}
-
-.markdown-h2 {
-  color: #444;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 1.5rem 0 0.8rem 0;
-  padding-left: 0.5rem;
-  border-left: 4px solid #667eea;
-}
-
-.markdown-h3 {
-  color: #555;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 1.2rem 0 0.6rem 0;
-}
-
-.markdown-p {
-  margin: 0.8rem 0;
-  color: #666;
-  line-height: 1.7;
-}
-
-.markdown-li {
-  margin: 0.5rem 0;
-  margin-left: 1.5rem;
-  color: #666;
-  list-style-type: none;
   position: relative;
 }
 
-.markdown-li::before {
-  content: "•";
+.markdown-h1-enhanced::before {
+  content: "📖";
+  margin-right: 0.5rem;
+}
+
+.markdown-h2-enhanced {
+  color: #34495e;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.8rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid #667eea;
+  position: relative;
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.markdown-h3-enhanced {
+  color: #4a5568;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.2rem 0 0.6rem 0;
+  padding-left: 0.5rem;
+  border-left: 2px solid #9f7aea;
+}
+
+/* 增强的段落样式 */
+.markdown-p-enhanced {
+  margin: 1rem 0;
+  color: #4a5568;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* 增强的列表样式 */
+.markdown-ul-enhanced {
+  margin: 1rem 0;
+  padding-left: 0;
+}
+
+.markdown-ol-enhanced {
+  margin: 1rem 0;
+  padding-left: 0;
+  counter-reset: custom-counter;
+}
+
+.markdown-li-enhanced {
+  margin: 0.8rem 0;
+  margin-left: 2rem;
+  color: #4a5568;
+  list-style-type: none;
+  position: relative;
+  line-height: 1.6;
+}
+
+.markdown-ul-enhanced .markdown-li-enhanced::before {
+  content: "✨";
   color: #667eea;
   font-weight: bold;
   position: absolute;
-  left: -1rem;
+  left: -1.5rem;
+  top: 0;
 }
 
-.word-footer {
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+.markdown-ol-enhanced .markdown-li-enhanced {
+  counter-increment: custom-counter;
 }
 
-.timestamp {
+.markdown-ol-enhanced .markdown-li-enhanced::before {
+  content: counter(custom-counter) "️⃣";
+  color: #667eea;
+  font-weight: bold;
+  position: absolute;
+  left: -2rem;
+  top: 0;
+  min-width: 1.5rem;
+}
+
+/* 增强的强调样式 */
+.markdown-strong-enhanced {
+  color: #2d3748;
+  font-weight: 700;
+  background: linear-gradient(120deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-em-enhanced {
+  color: #553c9a;
+  font-style: italic;
+  font-weight: 500;
+  position: relative;
+}
+
+.markdown-em-enhanced::before,
+.markdown-em-enhanced::after {
+  content: '"';
+  color: #9f7aea;
+  font-weight: bold;
+}
+
+/* 增强的代码样式 */
+.markdown-code-inline {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  color: #2d3748;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+  font-size: 0.9em;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-code-block {
+  background: #1a202c;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+  font-size: 0.9em;
+  overflow-x: auto;
+  margin: 1rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #2d3748;
+}
+
+/* 增强的引用样式 */
+.markdown-blockquote-enhanced {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-left: 4px solid #667eea;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 12px 12px 0;
+  position: relative;
+  font-style: italic;
+  color: #4a5568;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.markdown-blockquote-enhanced::before {
+  content: """;
+  font-size: 3rem;
+  color: #667eea;
+  position: absolute;
+  top: -0.5rem;
+  left: 0.5rem;
+  opacity: 0.3;
+  font-family: serif;
+}
+
+.markdown-blockquote-enhanced p {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* 增强的表格样式 */
+.markdown-table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-table-enhanced {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
   font-size: 0.9rem;
-  color: #888;
-  text-align: center;
+}
+
+.markdown-table-enhanced th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  border: none;
+}
+
+.markdown-table-enhanced td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #4a5568;
+}
+
+.markdown-table-enhanced tr:nth-child(even) {
+  background: rgba(102, 126, 234, 0.03);
+}
+
+.markdown-table-enhanced tr:hover {
+  background: rgba(102, 126, 234, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+/* 滚动条样式 */
+.word-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.word-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.word-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+.word-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
 }
 
 /* Error 样式 */
@@ -724,6 +924,15 @@ body {
   .error-actions {
     flex-direction: column;
   }
+
+  .word-stats {
+    justify-content: center;
+  }
+  
+  .word-footer {
+    flex-direction: column;
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -748,11 +957,15 @@ body {
     font-size: 1.8rem;
   }
   
-  .markdown-h1 {
+  .markdown-h1-enhanced {
     font-size: 1.5rem;
   }
   
-  .markdown-h2 {
+  .markdown-h2-enhanced {
     font-size: 1.3rem;
+  }
+
+  .markdown-ol-enhanced .markdown-li-enhanced::before {
+    left: -1.8rem;
   }
 }
