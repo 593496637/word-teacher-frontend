@@ -1,4 +1,4 @@
-// API 服务 - 连接本地4111端口Mastra服务
+// API 服务 - 支持开发和生产环境
 
 export interface WordRequest {
   word: string;
@@ -19,16 +19,17 @@ class WordTeacherAPI {
   private baseURL: string;
 
   constructor() {
-    // 连接本地4111端口Mastra服务
-    this.baseURL = 'http://localhost:4111';
+    // 支持环境变量配置，默认为开发环境
+    this.baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4111';
+    console.log('🔗 API Base URL:', this.baseURL);
   }
 
   /**
-   * 调用4111端口Mastra服务学习单词
+   * 调用 Mastra 服务学习单词
    */
   async teachWord(request: WordRequest): Promise<WordTeacherResponse> {
     try {
-      console.log('🔗 正在调用4111端口Mastra服务...', request);
+      console.log('🔗 正在调用 Mastra 服务...', { baseURL: this.baseURL, request });
       
       // 构建教学风格的中文描述
       const styleMap = {
@@ -56,7 +57,7 @@ class WordTeacherAPI {
       });
 
       if (!response.ok) {
-        throw new Error(`Mastra服务响应错误: ${response.status}`);
+        throw new Error(`Mastra服务响应错误: ${response.status} - ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -75,38 +76,22 @@ class WordTeacherAPI {
     } catch (error) {
       console.error('❌ 调用Mastra服务失败:', error);
       
-      // 返回演示数据
-      return this.getMockResponse(request);
+      // 根据环境决定是否返回演示数据
+      if (import.meta.env.DEV) {
+        return this.getMockResponse(request);
+      } else {
+        throw new Error(`无法连接到服务器: ${error instanceof Error ? error.message : '未知错误'}`);
+      }
     }
   }
 
   /**
-   * 演示数据 - 当4111端口服务不可用时使用
+   * 演示数据 - 仅在开发环境使用
    */
   private getMockResponse(request: WordRequest): WordTeacherResponse {
-    const mockContent = `# 单词教学：${request.word} (演示模式)
-
-## 基础信息
-- **拼写**: ${request.word}
-- **教学风格**: ${request.style}
-- **状态**: 演示模式
-
-## 🔧 连接提示
-当前为演示模式，请确保：
-1. 你的 Mastra 后端服务正在运行 (\`npm run dev\`)
-2. 服务运行在 http://localhost:4111
-3. 检查网络连接和跨域设置
-
-## 真实功能
-连接到 Mastra 服务后，你将获得：
-- 🎭 ${request.style}风格的教学内容
-- 📖 完整的单词解释和例句
-- 🧠 智能记忆技巧
-- ✨ AI 生成的个性化内容
-
-## 快速检查
-在浏览器中访问：http://localhost:4111
-`;
+    const env = import.meta.env.VITE_APP_ENV || 'development';
+    
+    const mockContent = `# 单词教学：${request.word} (${env}环境演示)\n\n## 基础信息\n- **拼写**: ${request.word}\n- **教学风格**: ${request.style}\n- **环境**: ${env}\n- **API地址**: ${this.baseURL}\n\n## 🔧 连接提示\n当前为演示模式，请确保：\n1. 你的 Mastra 后端服务正在运行 (\`npm run dev\`)\n2. 服务运行在 ${this.baseURL}\n3. 检查网络连接和跨域设置\n\n## 环境变量配置\n\`\`\`bash\n# 开发环境\nVITE_API_BASE_URL=http://localhost:4111\n\n# 生产环境\nVITE_API_BASE_URL=https://your-backend-domain.com\n\`\`\`\n\n## 真实功能\n连接到 Mastra 服务后，你将获得：\n- 🎭 ${request.style}风格的教学内容\n- 📖 完整的单词解释和例句\n- 🧠 智能记忆技巧\n- ✨ AI 生成的个性化内容\n\n## 快速检查\n在浏览器中访问：${this.baseURL}\n`;
 
     return {
       word: request.word,
@@ -118,7 +103,7 @@ class WordTeacherAPI {
   }
 
   /**
-   * 检查4111端口Mastra服务状态
+   * 检查 Mastra 服务状态
    */
   async checkHealth(): Promise<{ status: string; message: string }> {
     try {
@@ -137,16 +122,35 @@ class WordTeacherAPI {
       });
       
       if (response.ok) {
-        return { status: 'online', message: '✅ 4111端口Mastra服务正常运行' };
+        return { 
+          status: 'online', 
+          message: `✅ Mastra服务正常运行 (${this.baseURL})` 
+        };
       } else {
-        return { status: 'error', message: '⚠️ 4111端口Mastra服务响应异常' };
+        return { 
+          status: 'error', 
+          message: `⚠️ Mastra服务响应异常 (${response.status})` 
+        };
       }
     } catch (error) {
+      const env = import.meta.env.VITE_APP_ENV || 'development';
       return { 
         status: 'offline', 
-        message: '🔌 无法连接4111端口Mastra服务，当前使用演示模式' 
+        message: `🔌 无法连接Mastra服务 (${this.baseURL})${env === 'development' ? '，当前使用演示模式' : ''}` 
       };
     }
+  }
+
+  /**
+   * 获取当前 API 配置信息
+   */
+  getConfig() {
+    return {
+      baseURL: this.baseURL,
+      environment: import.meta.env.MODE,
+      isDev: import.meta.env.DEV,
+      isProd: import.meta.env.PROD
+    };
   }
 }
 
