@@ -1,92 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeRaw from 'rehype-raw';
 import { WordInput } from './components/WordInput';
+import { MarkdownRenderer } from './components/MarkdownRenderer';
 import { wordTeacherAPI, WordRequest, WordTeacherResponse } from './services/api';
 import './App.css';
 import './highlight.css'; // 导入代码高亮样式
 
-// 专业 Markdown 渲染组件
-const EnhancedMarkdownDisplay: React.FC<{ content: string }> = ({ content }) => {
-  return (
-    <div className="enhanced-markdown">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight, rehypeRaw]}
-        components={{
-          // 自定义标题样式
-          h1: ({ children }) => (
-            <h1 className="markdown-h1-enhanced">{children}</h1>
-          ),
-          h2: ({ children }) => (
-            <h2 className="markdown-h2-enhanced">{children}</h2>
-          ),
-          h3: ({ children }) => (
-            <h3 className="markdown-h3-enhanced">{children}</h3>
-          ),
-          // 自定义段落样式
-          p: ({ children }) => (
-            <p className="markdown-p-enhanced">{children}</p>
-          ),
-          // 自定义列表样式
-          ul: ({ children }) => (
-            <ul className="markdown-ul-enhanced">{children}</ul>
-          ),
-          ol: ({ children }) => (
-            <ol className="markdown-ol-enhanced">{children}</ol>
-          ),
-          li: ({ children }) => (
-            <li className="markdown-li-enhanced">{children}</li>
-          ),
-          // 自定义强调样式
-          strong: ({ children }) => (
-            <strong className="markdown-strong-enhanced">{children}</strong>
-          ),
-          em: ({ children }) => (
-            <em className="markdown-em-enhanced">{children}</em>
-          ),
-          // 增强的代码样式
-          code: ({ children, className, ...props }) => {
-            const match = /language-(\w+)/.exec(className || '');
-            const isInline = !match;
-            
-            if (isInline) {
-              return <code className="markdown-code-inline" {...props}>{children}</code>;
-            }
-            
-            return (
-              <div className="code-block-wrapper">
-                <code className={`hljs ${className}`} {...props}>
-                  {children}
-                </code>
-              </div>
-            );
-          },
-          // 自定义预格式化代码块
-          pre: ({ children, ...props }) => (
-            <pre {...props}>{children}</pre>
-          ),
-          // 自定义引用样式
-          blockquote: ({ children }) => (
-            <blockquote className="markdown-blockquote-enhanced">{children}</blockquote>
-          ),
-          // 自定义表格样式
-          table: ({ children }) => (
-            <div className="markdown-table-wrapper">
-              <table className="markdown-table-enhanced">{children}</table>
-            </div>
-          ),
-        }}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
-};
-
-// 单词显示组件（使用增强的 Markdown 渲染）
+// 单词显示组件（使用新的 Markdown 渲染器）
 const WordDisplay: React.FC<{ data: WordTeacherResponse; onNewWord: () => void }> = ({ data, onNewWord }) => (
   <div className="word-display-container">
     <div className="word-display-header">
@@ -98,7 +17,7 @@ const WordDisplay: React.FC<{ data: WordTeacherResponse; onNewWord: () => void }
     </div>
     
     <div className="word-content">
-      <EnhancedMarkdownDisplay content={data.content} />
+      <MarkdownRenderer content={data.content} />
     </div>
     
     <div className="word-footer">
@@ -179,6 +98,7 @@ function App() {
                 <p>🔗 API: http://localhost:4111/api/agents/wordTeacher/generate</p>
                 <p>🧠 模型: OpenAI GPT-4o-mini</p>
                 <p>📝 格式: Markdown + 代码高亮</p>
+                <p>🎨 增强: 语法高亮 + 自定义样式</p>
               </div>
             </div>
           </div>
@@ -241,7 +161,7 @@ function App() {
           🔗 连接本地4111端口Mastra服务 | 
           📱 React + TypeScript 前端 | 
           🤖 OpenAI GPT-4o-mini | 
-          📝 React-Markdown + 代码高亮渲染
+          📝 增强 Markdown 渲染器 + 专业代码高亮
         </p>
       </footer>
     </div>
