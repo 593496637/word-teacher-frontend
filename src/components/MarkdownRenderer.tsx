@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
+import '../markdown-enhanced.css'; // 导入增强样式
 
 interface MarkdownRendererProps {
   content: string;
@@ -18,6 +19,9 @@ interface MarkdownRendererProps {
  * - 自定义样式组件
  * - 表格、列表、引用等增强样式
  * - 响应式设计
+ * - 任务列表支持
+ * - 图片懒加载
+ * - 外部链接安全处理
  */
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ 
   content, 
