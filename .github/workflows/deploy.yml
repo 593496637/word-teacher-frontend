@@ -1,0 +1,64 @@
+name: 🚀 Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    name: 🏗️ Build and Deploy
+    
+    steps:
+      # 📥 检出代码
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      # 🟢 设置 Node.js
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      # 📦 安装依赖
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      # 🔧 类型检查
+      - name: 🔧 Type check
+        run: npm run type-check
+        
+      # 🧹 代码检查
+      - name: 🧹 Lint check
+        run: npm run lint
+        
+      # 🏗️ 构建项目
+      - name: 🏗️ Build project
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || 'http://localhost:4111' }}
+          
+      # 🚀 部署到 Cloudflare Pages
+      - name: 🚀 Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          
+      # 📄 上传构建产物
+      - name: 📄 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-files
+          path: dist/
+          retention-days: 7
