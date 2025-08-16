@@ -6,12 +6,13 @@ interface WordInputProps {
   loading: boolean;
 }
 
+// 更新教学风格，匹配后端 Mastra 服务
 const TEACHING_STYLES = [
-  { value: 'conversational', label: '🗣️ 对话式', description: '轻松聊天的方式' },
-  { value: 'humorous', label: '😄 幽默式', description: '风趣有趣的教学' },
-  { value: 'storytelling', label: '📚 故事式', description: '通过故事学习' },
-  { value: 'serious', label: '🎓 严谨式', description: '专业权威的解释' },
-  { value: 'academic', label: '🔬 学术式', description: '深度学术分析' },
+  { value: 'humorous', label: '😄 幽默式', description: '风趣有趣的教学，用笑话和有趣例子' },
+  { value: 'serious', label: '🎓 严肃式', description: '学术严谨，注重准确性' },
+  { value: 'vivid', label: '🎨 生动式', description: '形象比喻，善用故事记忆' },
+  { value: 'simple', label: '🌱 简单式', description: '通俗易懂，朴实语言' },
+  { value: 'detailed', label: '🔬 详细式', description: '深入分析，多角度解释' },
 ] as const;
 
 const LEARNING_LEVELS = [
@@ -22,7 +23,7 @@ const LEARNING_LEVELS = [
 
 export const WordInput: React.FC<WordInputProps> = ({ onSubmit, loading }) => {
   const [word, setWord] = useState('');
-  const [style, setStyle] = useState<WordRequest['style']>('conversational');
+  const [style, setStyle] = useState<WordRequest['style']>('vivid'); // 默认生动风格
   const [level, setLevel] = useState<WordRequest['level']>('intermediate');
   const [error, setError] = useState('');
 
@@ -58,32 +59,60 @@ export const WordInput: React.FC<WordInputProps> = ({ onSubmit, loading }) => {
     if (error) setError('');
   };
 
+  const handleQuickStart = (quickWord: string) => {
+    setWord(quickWord);
+    setError('');
+  };
+
   return (
     <div className="word-input-container">
       <div className="word-input-card">
-        <h2 className="word-input-title">🎯 每日单词老师</h2>
-        <p className="word-input-subtitle">连接本地Mastra服务，获得AI生成的个性化学习内容</p>
+        <div className="word-input-header">
+          <h2 className="word-input-title">📚 每日单词老师</h2>
+          <p className="word-input-subtitle">
+            连接本地4111端口Mastra服务，获得GPT-4o-mini生成的个性化教学内容
+          </p>
+        </div>
         
         <form onSubmit={handleSubmit} className="word-input-form">
           <div className="input-group">
             <label htmlFor="word" className="input-label">
-              要学习的单词
+              💭 要学习的单词
             </label>
             <input
               id="word"
               type="text"
               value={word}
               onChange={handleWordChange}
-              placeholder="例如: serendipity"
+              placeholder="例如: serendipity, adventure, innovation..."
               className={`word-input ${error ? 'error' : ''}`}
               disabled={loading}
               autoComplete="off"
+              autoFocus
             />
             {error && <span className="error-message">{error}</span>}
+            
+            {/* 快速开始选项 */}
+            <div className="quick-start">
+              <span className="quick-start-label">🚀 快速开始:</span>
+              <div className="quick-words">
+                {['serendipity', 'adventure', 'innovation', 'resilience'].map((quickWord) => (
+                  <button
+                    key={quickWord}
+                    type="button"
+                    className="quick-word-btn"
+                    onClick={() => handleQuickStart(quickWord)}
+                    disabled={loading}
+                  >
+                    {quickWord}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="input-group">
-            <label className="input-label">教学风格</label>
+            <label className="input-label">🎭 教学风格 (匹配Mastra后端)</label>
             <div className="style-grid">
               {TEACHING_STYLES.map((styleOption) => (
                 <label
@@ -108,7 +137,7 @@ export const WordInput: React.FC<WordInputProps> = ({ onSubmit, loading }) => {
           </div>
 
           <div className="input-group">
-            <label className="input-label">学习级别</label>
+            <label className="input-label">📊 学习级别</label>
             <div className="level-selector">
               {LEARNING_LEVELS.map((levelOption) => (
                 <label
@@ -140,16 +169,25 @@ export const WordInput: React.FC<WordInputProps> = ({ onSubmit, loading }) => {
             {loading ? (
               <>
                 <span className="loading-spinner"></span>
-                正在调用Mastra服务...
+                连接Mastra服务中...
               </>
             ) : (
               <>
                 <span>🚀</span>
-                开始学习
+                开始AI教学
               </>
             )}
           </button>
         </form>
+
+        <div className="connection-info">
+          <p className="connection-text">
+            🔗 API地址: <code>http://localhost:4111/api/agents/wordTeacher/generate</code>
+          </p>
+          <p className="connection-text">
+            🤖 AI模型: OpenAI GPT-4o-mini
+          </p>
+        </div>
       </div>
     </div>
   );
