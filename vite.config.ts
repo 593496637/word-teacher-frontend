@@ -9,7 +9,7 @@ export default defineConfig({
   build: {
     // 输出目录
     outDir: 'dist',
-    // 生成源映射
+    // 生成源映射（生产环境关闭以减小构建大小）
     sourcemap: false,
     // 清理输出目录
     emptyOutDir: true,
@@ -21,15 +21,6 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           markdown: ['react-markdown', 'remark-gfm', 'rehype-highlight', 'rehype-raw']
         }
-      }
-    },
-    // 压缩配置
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        // 移除 console.log
-        drop_console: true,
-        drop_debugger: true
       }
     }
   },
@@ -56,7 +47,7 @@ export default defineConfig({
   
   // 环境变量配置
   define: {
-    __APP_VERSION__: JSON.stringify(process.env.npm_package_version)
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0')
   },
   
   // 静态资源处理
