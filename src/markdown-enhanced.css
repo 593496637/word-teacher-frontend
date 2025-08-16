@@ -1,0 +1,287 @@
+/* 增强的 Markdown 组件额外样式 */
+
+/* 补充的标题样式 */
+.markdown-h4-enhanced {
+  color: #4a5568;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  padding-left: 0.25rem;
+  border-left: 2px solid #cbd5e0;
+}
+
+.markdown-h5-enhanced {
+  color: #4a5568;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.8rem 0 0.4rem 0;
+}
+
+.markdown-h6-enhanced {
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.6rem 0 0.3rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 增强的链接样式 */
+.markdown-link-enhanced {
+  color: #667eea;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.markdown-link-enhanced:hover {
+  color: #5a6fd8;
+  border-bottom-color: #667eea;
+  background: linear-gradient(120deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 0.1rem 0.2rem;
+  border-radius: 4px;
+  transform: translateY(-1px);
+}
+
+/* 增强的图片样式 */
+.markdown-img-wrapper {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.markdown-img-enhanced {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.markdown-img-enhanced:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.markdown-img-caption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* 增强的分隔线样式 */
+.markdown-hr-enhanced {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #667eea 50%, transparent 100%);
+  margin: 2rem 0;
+  position: relative;
+}
+
+.markdown-hr-enhanced::before {
+  content: "✦";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: #667eea;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+}
+
+/* 增强的删除线样式 */
+.markdown-del-enhanced {
+  text-decoration: line-through;
+  color: #888;
+  background: rgba(244, 67, 54, 0.1);
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
+}
+
+/* 增强的任务列表样式 */
+.markdown-checkbox-enhanced {
+  margin-right: 0.5rem;
+  accent-color: #667eea;
+  transform: scale(1.2);
+}
+
+/* 代码块语言标签增强 */
+.language-label {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.code-block-wrapper:hover .language-label {
+  opacity: 1;
+}
+
+/* 增强的预格式化代码块 */
+.markdown-pre-enhanced {
+  margin: 1rem 0;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 表格组件增强样式 */
+.markdown-thead-enhanced {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.markdown-tbody-enhanced tr:nth-child(even) {
+  background: rgba(102, 126, 234, 0.03);
+}
+
+.markdown-tbody-enhanced tr:hover {
+  background: rgba(102, 126, 234, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.markdown-tr-enhanced {
+  transition: all 0.2s ease;
+}
+
+.markdown-th-enhanced {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: white;
+  border: none;
+}
+
+.markdown-td-enhanced {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #4a5568;
+  vertical-align: top;
+}
+
+/* 嵌套列表样式 */
+.markdown-ul-enhanced .markdown-ul-enhanced {
+  margin: 0.5rem 0;
+  margin-left: 1rem;
+}
+
+.markdown-ol-enhanced .markdown-ol-enhanced {
+  margin: 0.5rem 0;
+  margin-left: 1rem;
+}
+
+.markdown-ul-enhanced .markdown-ul-enhanced .markdown-li-enhanced::before {
+  content: "◦";
+  color: #9f7aea;
+}
+
+.markdown-ul-enhanced .markdown-ul-enhanced .markdown-ul-enhanced .markdown-li-enhanced::before {
+  content: "▫";
+  color: #cbd5e0;
+}
+
+/* 特殊内容样式 */
+.markdown-kbd {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-bottom: 2px solid #cbd5e0;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+  font-size: 0.85em;
+  color: #2d3748;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 注释和警告框样式 */
+.markdown-note,
+.markdown-warning,
+.markdown-tip,
+.markdown-important {
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border-left: 4px solid;
+  position: relative;
+}
+
+.markdown-note {
+  background: rgba(79, 172, 254, 0.1);
+  border-left-color: #4facfe;
+  color: #1a365d;
+}
+
+.markdown-warning {
+  background: rgba(255, 193, 7, 0.1);
+  border-left-color: #ffc107;
+  color: #744210;
+}
+
+.markdown-tip {
+  background: rgba(72, 187, 120, 0.1);
+  border-left-color: #48bb78;
+  color: #22543d;
+}
+
+.markdown-important {
+  background: rgba(245, 101, 101, 0.1);
+  border-left-color: #f56565;
+  color: #742a2a;
+}
+
+/* 响应式增强 */
+@media (max-width: 768px) {
+  .markdown-img-enhanced {
+    border-radius: 8px;
+  }
+  
+  .markdown-table-wrapper {
+    border-radius: 8px;
+  }
+  
+  .language-label {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .markdown-th-enhanced,
+  .markdown-td-enhanced {
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .markdown-h1-enhanced {
+    font-size: 1.5rem;
+  }
+  
+  .markdown-h2-enhanced {
+    font-size: 1.3rem;
+  }
+  
+  .markdown-h3-enhanced {
+    font-size: 1.1rem;
+  }
+  
+  .markdown-blockquote-enhanced {
+    margin: 1rem 0;
+    padding: 0.8rem 1rem;
+  }
+  
+  .markdown-blockquote-enhanced::before {
+    font-size: 2rem;
+    top: -0.3rem;
+    left: 0.3rem;
+  }
+}
