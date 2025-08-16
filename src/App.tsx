@@ -6,6 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import { WordInput } from './components/WordInput';
 import { wordTeacherAPI, WordRequest, WordTeacherResponse } from './services/api';
 import './App.css';
+import './highlight.css'; // 导入代码高亮样式
 
 // 专业 Markdown 渲染组件
 const EnhancedMarkdownDisplay: React.FC<{ content: string }> = ({ content }) => {
@@ -46,15 +47,27 @@ const EnhancedMarkdownDisplay: React.FC<{ content: string }> = ({ content }) => 
           em: ({ children }) => (
             <em className="markdown-em-enhanced">{children}</em>
           ),
-          // 自定义代码样式
-          code: ({ children, className }) => {
-            const isInline = !className;
-            return isInline ? (
-              <code className="markdown-code-inline">{children}</code>
-            ) : (
-              <code className={`markdown-code-block ${className}`}>{children}</code>
+          // 增强的代码样式
+          code: ({ children, className, ...props }) => {
+            const match = /language-(\w+)/.exec(className || '');
+            const isInline = !match;
+            
+            if (isInline) {
+              return <code className="markdown-code-inline" {...props}>{children}</code>;
+            }
+            
+            return (
+              <div className="code-block-wrapper">
+                <code className={`hljs ${className}`} {...props}>
+                  {children}
+                </code>
+              </div>
             );
           },
+          // 自定义预格式化代码块
+          pre: ({ children, ...props }) => (
+            <pre {...props}>{children}</pre>
+          ),
           // 自定义引用样式
           blockquote: ({ children }) => (
             <blockquote className="markdown-blockquote-enhanced">{children}</blockquote>
@@ -92,7 +105,8 @@ const WordDisplay: React.FC<{ data: WordTeacherResponse; onNewWord: () => void }
       <p className="timestamp">生成时间: {new Date(data.timestamp).toLocaleString('zh-CN')}</p>
       <div className="word-stats">
         <span className="stat-item">🤖 AI生成</span>
-        <span className="stat-item">📝 Markdown格式</span>
+        <span className="stat-item">📝 Markdown渲染</span>
+        <span className="stat-item">🎨 代码高亮</span>
         <span className="stat-item">🎭 {data.style}风格</span>
       </div>
     </div>
@@ -164,7 +178,7 @@ function App() {
               <div className="loading-details">
                 <p>🔗 API: http://localhost:4111/api/agents/wordTeacher/generate</p>
                 <p>🧠 模型: OpenAI GPT-4o-mini</p>
-                <p>📝 格式: Markdown</p>
+                <p>📝 格式: Markdown + 代码高亮</p>
               </div>
             </div>
           </div>
@@ -227,7 +241,7 @@ function App() {
           🔗 连接本地4111端口Mastra服务 | 
           📱 React + TypeScript 前端 | 
           🤖 OpenAI GPT-4o-mini | 
-          📝 React-Markdown 渲染
+          📝 React-Markdown + 代码高亮渲染
         </p>
       </footer>
     </div>
