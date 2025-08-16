@@ -47,7 +47,7 @@ export default defineConfig({
   
   // 环境变量配置
   define: {
-    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0')
+    __APP_VERSION__: JSON.stringify('1.0.0')
   },
   
   // 静态资源处理
