@@ -1,54 +1,79 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
 import { WordInput } from './components/WordInput';
 import { wordTeacherAPI, WordRequest, WordTeacherResponse } from './services/api';
 import './App.css';
 
-// Markdown 渲染组件（简化版）
-const MarkdownDisplay: React.FC<{ content: string }> = ({ content }) => {
-  // 简单的 Markdown 解析和渲染
-  const renderMarkdown = (text: string) => {
-    return text
-      .split('\n')
-      .map((line, index) => {
-        // 标题处理
-        if (line.startsWith('# ')) {
-          return <h1 key={index} className="markdown-h1">{line.substring(2)}</h1>;
-        }
-        if (line.startsWith('## ')) {
-          return <h2 key={index} className="markdown-h2">{line.substring(3)}</h2>;
-        }
-        if (line.startsWith('### ')) {
-          return <h3 key={index} className="markdown-h3">{line.substring(4)}</h3>;
-        }
-        
-        // 列表处理
-        if (line.startsWith('- ')) {
-          return <li key={index} className="markdown-li">{line.substring(2)}</li>;
-        }
-        
-        // 粗体处理
-        const boldText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        
-        // 空行处理
-        if (line.trim() === '') {
-          return <br key={index} />;
-        }
-        
-        // 普通段落
-        return (
-          <p 
-            key={index} 
-            className="markdown-p"
-            dangerouslySetInnerHTML={{ __html: boldText }}
-          />
-        );
-      });
-  };
-
-  return <div className="markdown-content">{renderMarkdown(content)}</div>;
+// 专业 Markdown 渲染组件
+const EnhancedMarkdownDisplay: React.FC<{ content: string }> = ({ content }) => {
+  return (
+    <div className="enhanced-markdown">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeHighlight, rehypeRaw]}
+        components={{
+          // 自定义标题样式
+          h1: ({ children }) => (
+            <h1 className="markdown-h1-enhanced">{children}</h1>
+          ),
+          h2: ({ children }) => (
+            <h2 className="markdown-h2-enhanced">{children}</h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="markdown-h3-enhanced">{children}</h3>
+          ),
+          // 自定义段落样式
+          p: ({ children }) => (
+            <p className="markdown-p-enhanced">{children}</p>
+          ),
+          // 自定义列表样式
+          ul: ({ children }) => (
+            <ul className="markdown-ul-enhanced">{children}</ul>
+          ),
+          ol: ({ children }) => (
+            <ol className="markdown-ol-enhanced">{children}</ol>
+          ),
+          li: ({ children }) => (
+            <li className="markdown-li-enhanced">{children}</li>
+          ),
+          // 自定义强调样式
+          strong: ({ children }) => (
+            <strong className="markdown-strong-enhanced">{children}</strong>
+          ),
+          em: ({ children }) => (
+            <em className="markdown-em-enhanced">{children}</em>
+          ),
+          // 自定义代码样式
+          code: ({ children, className }) => {
+            const isInline = !className;
+            return isInline ? (
+              <code className="markdown-code-inline">{children}</code>
+            ) : (
+              <code className={`markdown-code-block ${className}`}>{children}</code>
+            );
+          },
+          // 自定义引用样式
+          blockquote: ({ children }) => (
+            <blockquote className="markdown-blockquote-enhanced">{children}</blockquote>
+          ),
+          // 自定义表格样式
+          table: ({ children }) => (
+            <div className="markdown-table-wrapper">
+              <table className="markdown-table-enhanced">{children}</table>
+            </div>
+          ),
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
 };
 
-// 单词显示组件
+// 单词显示组件（使用增强的 Markdown 渲染）
 const WordDisplay: React.FC<{ data: WordTeacherResponse; onNewWord: () => void }> = ({ data, onNewWord }) => (
   <div className="word-display-container">
     <div className="word-display-header">
@@ -60,11 +85,16 @@ const WordDisplay: React.FC<{ data: WordTeacherResponse; onNewWord: () => void }
     </div>
     
     <div className="word-content">
-      <MarkdownDisplay content={data.content} />
+      <EnhancedMarkdownDisplay content={data.content} />
     </div>
     
     <div className="word-footer">
       <p className="timestamp">生成时间: {new Date(data.timestamp).toLocaleString('zh-CN')}</p>
+      <div className="word-stats">
+        <span className="stat-item">🤖 AI生成</span>
+        <span className="stat-item">📝 Markdown格式</span>
+        <span className="stat-item">🎭 {data.style}风格</span>
+      </div>
     </div>
   </div>
 );
@@ -95,11 +125,14 @@ function App() {
     setError('');
     
     try {
+      console.log('🎯 开始学习单词:', request);
       const response = await wordTeacherAPI.teachWord(request);
+      console.log('✅ 获得教学内容:', response);
       setWordData(response);
       setState('display');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '未知错误';
+      console.error('❌ 学习失败:', errorMessage);
       setError(errorMessage);
       setState('error');
     }
@@ -126,11 +159,12 @@ function App() {
           <div className="loading-container">
             <div className="loading-card">
               <div className="loading-spinner large"></div>
-              <h2>🤖 正在连接Mastra服务</h2>
-              <p className="loading-text">正在调用4111端口获取AI生成的教学内容...</p>
+              <h2>🤖 AI老师正在准备教学内容</h2>
+              <p className="loading-text">连接 Mastra 服务，调用 GPT-4o-mini 生成个性化内容...</p>
               <div className="loading-details">
-                <p>🔗 连接地址: http://localhost:4111</p>
-                <p>🎯 API路径: /api/agents/wordTeacher/generate</p>
+                <p>🔗 API: http://localhost:4111/api/agents/wordTeacher/generate</p>
+                <p>🧠 模型: OpenAI GPT-4o-mini</p>
+                <p>📝 格式: Markdown</p>
               </div>
             </div>
           </div>
@@ -151,7 +185,8 @@ function App() {
                 <ul>
                   <li>确保 Mastra 后端服务正在运行 (<code>npm run dev</code>)</li>
                   <li>检查服务地址: <a href="http://localhost:4111" target="_blank" rel="noopener noreferrer">http://localhost:4111</a></li>
-                  <li>确认防火墙没有阻止4111端口</li>
+                  <li>确认 OpenAI API Key 配置正确</li>
+                  <li>检查防火墙没有阻止4111端口</li>
                 </ul>
               </div>
               <div className="error-actions">
@@ -190,8 +225,9 @@ function App() {
       <footer className="app-footer">
         <p>
           🔗 连接本地4111端口Mastra服务 | 
-          📱 纯前端React界面 | 
-          🤖 OpenAI GPT-4o-mini 驱动
+          📱 React + TypeScript 前端 | 
+          🤖 OpenAI GPT-4o-mini | 
+          📝 React-Markdown 渲染
         </p>
       </footer>
     </div>
