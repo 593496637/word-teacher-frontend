@@ -48,7 +48,7 @@ function App() {
     try {
       const result = await wordTeacherAPI.checkHealth();
       setServerStatus(result.status === 'online' ? 'online' : 'offline');
-    } catch (error) {
+    } catch {
       setServerStatus('offline');
     }
   };

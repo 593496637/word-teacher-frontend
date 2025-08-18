@@ -132,7 +132,7 @@ class WordTeacherAPI {
           message: `⚠️ Mastra服务响应异常 (${response.status})` 
         };
       }
-    } catch (error) {
+    } catch {
       const env = import.meta.env.VITE_APP_ENV || 'development';
       return { 
         status: 'offline', 
