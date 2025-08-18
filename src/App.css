@@ -680,7 +680,7 @@ body {
 }
 
 .markdown-blockquote-enhanced::before {
-  content: """;
+  content: "\201C";
   font-size: 3rem;
   color: #667eea;
   position: absolute;
