@@ -22,7 +22,7 @@ jobs:
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
           
       # 🟢 设置 Node.js
       - name: 🟢 Setup Node.js
