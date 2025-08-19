@@ -42,8 +42,8 @@ class WordTeacherAPI {
       
       const styleText = styleMap[request.style] || '生动';
       
-      // 修复：使用正确的 Mastra API 端点
-      const response = await fetch(`${this.baseURL}/api/agents/wordTeacher`, {
+      // 使用正确的 Mastra API 端点：/api/agents/wordTeacher/generate
+      const response = await fetch(`${this.baseURL}/api/agents/wordTeacher/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ class WordTeacherAPI {
   async checkHealth(): Promise<{ status: string; message: string }> {
     try {
       // 使用正确的 Mastra API 端点进行健康检查
-      const response = await fetch(`${this.baseURL}/api/agents/wordTeacher`, {
+      const response = await fetch(`${this.baseURL}/api/agents/wordTeacher/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
