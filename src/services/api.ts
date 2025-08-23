@@ -69,7 +69,7 @@ class WordTeacherAPI {
       const result: WordTeacherResponse = {
         word: request.word,
         style: request.style,
-        content: data.text || data.content || data.response, // 兼容不同的响应格式
+        content: data.text || data.content || data.response || data, // 兼容不同的响应格式
         timestamp: new Date().toISOString(),
         success: true
       };
